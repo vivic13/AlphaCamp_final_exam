@@ -6,7 +6,7 @@ RSpec.describe User, type: :model do
     @user = User.create!( :email => "test1@example.org", :password => "12345678")
   end
 
-  describe "#messages_count" do
+  describe "#post_count" do
     before do
       @user = User.create!( :email => "test2@example.org", :password => "12345678")
       @user2 = User.create!( :email => "test3@example.org", :password => "12345678")
