@@ -1,7 +1,7 @@
 class MessagesController < ApplicationController
 
   before_action :authenticate_user!, :except => [:index, :show]
-
+  before_action :find_message, only:[:subscribe, :unsubscribe, :like, :unlike]
   def index
     # TODO: fix N+1 queries for user and comments
     @messages = Message.includes(:user,:comments).order("id DESC").page( params[:page] )
@@ -59,10 +59,46 @@ class MessagesController < ApplicationController
     redirect_to root_path
   end
 
+  def subscribe
+    @subscribe = Subscribe.create(:user => current_user, :message => @message)
+    redirect_to root_path
+
+  end
+
+  def unsubscribe
+
+    if @message.already_subscribed(current_user)
+      @subscribe = @message.find_subscribe(current_user)
+      @subscribe.destroy
+      redirect_to root_path
+    end
+
+  end
+
+  def like 
+    
+    @like = Like.create(:user => current_user, :message => @message)
+    redirect_to root_path
+
+  end
+
+  def unlike
+    if @message.already_liked(current_user)
+      @like = @message.find_like(current_user)
+      @like.destroy
+      redirect_to root_path
+    end
+
+  end
+
+
   protected
 
   def message_params
     params.require(:message).permit(:title, :content, :category_name)
   end
 
+  def find_message
+    @message = Message.find(params[:id])
+  end
 end

@@ -32,6 +32,32 @@
     <td><%= msg.created_at.to_s(:short) %></td>
     <td><%= msg.last_comment_summary %></td>
     <td>
+      <p>See who likes</p>
+              <% msg.likes.each do |f| %>
+                <%= f.user.email%>&nbsp;
+              <% end %>
+      </p>
+      <% if msg.already_liked(current_user) %>      
+        <%= button_to 'unlike', unlike_message_path(msg) %>
+      <%else%>      
+        <%= button_to 'like', like_message_path(msg) %>
+      <% end %>
+    </td>
+    <td>
+      <p>See who subscribe</p>
+              <% msg.subscribes.each do |f| %>
+                <%= f.user.email%>&nbsp;
+              <% end %>
+      </p>
+      <% if msg.already_subscribed(current_user) %>      
+        <%= button_to 'unsubscribe', unsubscribe_message_path(msg) %>
+      <%else%>      
+        <%= button_to 'subscribe', subscribe_message_path(msg) %>
+      <% end %>
+    </td>
+
+
+    <td>
       <% if msg.user == current_user %>
         <%= link_to "Edit", edit_message_path(msg) %>
         <%= link_to "Delete", message_path(msg), :method => :delete, :data => { :confirm => "Are u sure?"} %>
