@@ -22,9 +22,9 @@ namespace :dev do
                             :user => users.sample )
       end
       2.times do 
-+        m.likes.create!(:user => users.sample)
-+        m.subscribes.create!(:user => users.sample)
-+     end
+        m.likes.create!(:user => users.sample)
+        m.subscribes.create!(:user => users.sample)
+     end
     end
   end
 
